@@ -2355,7 +2355,7 @@ export class Client extends GameShell {
 
         await this.handleInputKey();
 
-        if (now - this.idleTimer > 90_000) {
+        if (now - this.idleTimer > 300_000) {
             // no input in 90s, notify the server
             this.logoutTimer = 250;
             this.idleTimer += 10_000; // 10s backoff
@@ -3247,6 +3247,13 @@ export class Client extends GameShell {
         } else {
             this.orbitCameraYawVelocity = (this.orbitCameraYawVelocity / 2) | 0;
         }
+		
+		// Mouse camera control when middle click is pressed
+        this.orbitCameraYawVelocity -= this.mouseDeltaX * 2;
+        this.orbitCameraPitchVelocity += this.mouseDeltaY * 2;
+
+        this.mouseDeltaX = 0;
+        this.mouseDeltaY = 0;
 
         if (this.keyHeld[3] === 1) {
             this.orbitCameraPitchVelocity += ((12 - this.orbitCameraPitchVelocity) / 2) | 0;
@@ -11785,6 +11792,17 @@ export class Client extends GameShell {
             this.idleTimer = performance.now();
             this.mouseX = x;
             this.mouseY = y;
+			
+			// For camera control
+			if ((e.buttons & 4) !== 0) {
+                this.mouseDeltaX += e.movementX;
+                this.mouseDeltaY += e.movementY;
+            }
+			
+			if (InputTracking.active) {
+                InputTracking.mouseMoved(x, y, e.pointerType);
+            }
+			
         } else {
             // custom: touchscreen support
             this.idleTimer = performance.now();

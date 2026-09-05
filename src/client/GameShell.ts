@@ -29,6 +29,11 @@ export default abstract class GameShell {
     public mouseClickY: number = -1;
     protected nextMouseClickTime: number = 0;
     public mouseClickTime: number = 0;
+	
+	// For mouse camera movement
+	protected mouseDeltaX: number = 0;
+    protected mouseDeltaY: number = 0;
+
 
     public keyHeld: number[] = [];
     protected keyQueue: number[] = [];
@@ -327,6 +332,10 @@ export default abstract class GameShell {
         if (e.button === 2) {
             this.nextMouseClickButton = 2;
             this.mouseButton = 2;
+        } else if (e.button === 1) {
+            // Middle mouse: camera control, not a game click.
+            this.nextMouseClickButton = 0;
+            this.mouseButton = 0;
         } else {
             this.nextMouseClickButton = 1;
             this.mouseButton = 1;

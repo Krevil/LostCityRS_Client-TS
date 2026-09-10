@@ -469,6 +469,7 @@ export class Client extends GameShell {
     private chatEffects: number = 0;
     private splitPrivateChat: number = 0;
     private bankArrangeMode: number = 0;
+    private attackFirst: number = 0;
 
     private resumedPauseButton: boolean = false;
     private runenergy: number = 0;
@@ -4573,7 +4574,7 @@ export class Client extends GameShell {
         if (this.localPlayer && this.mapl && (this.mapl[this.minusedlevel][this.localPlayer.x >> 7][this.localPlayer.z >> 7] & MapFlag.RemoveRoof) !== 0) {
             top = this.minusedlevel;
         }
-
+        
         return top;
     }
 
@@ -9528,7 +9529,7 @@ export class Client extends GameShell {
                     }
 
                     let priority: number = 0;
-                    if (this.localPlayer && npc.vislevel > this.localPlayer.combatLevel) {
+                    if ((this.localPlayer && npc.vislevel > this.localPlayer.combatLevel) || this.attackFirst) {
                         priority = MiniMenuAction._PRIORITY;
                     }
 
@@ -10692,6 +10693,8 @@ export class Client extends GameShell {
             this.redrawChat = true;
         } else if (clientcode === 9) {
             this.bankArrangeMode = value;
+        } else if (clientcode === 18) {
+            this.attackFirst = value;
         }
     }
 
@@ -11797,10 +11800,6 @@ export class Client extends GameShell {
 			if ((e.buttons & 4) !== 0) {
                 this.mouseDeltaX += e.movementX;
                 this.mouseDeltaY += e.movementY;
-            }
-			
-			if (InputTracking.active) {
-                InputTracking.mouseMoved(x, y, e.pointerType);
             }
 			
         } else {

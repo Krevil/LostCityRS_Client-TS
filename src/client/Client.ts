@@ -2684,7 +2684,7 @@ export class Client extends GameShell {
 
             if (type === ChatTypes.GENERIC) {
                 line++;
-            } else if ((type == ChatTypes.PUBLIC || type == ChatTypes.PUBLIC_FILTERED) && (type == 1 || this.chatPublicMode == 0 || (this.chatPublicMode == 1 && this.isFriend(sender)))) {
+            } else if ((type == ChatTypes.PUBLIC_MOD || type == ChatTypes.PUBLIC) && (type == ChatTypes.PUBLIC_MOD || this.chatPublicMode == 0 || (this.chatPublicMode == 1 && this.isFriend(sender)))) {
                 if (mouseY > y - 14 && mouseY <= y && this.localPlayer && sender !== this.localPlayer.name) {
                     if (this.staffmodlevel >= 1) {
                         this.menuOption[this.menuNumEntries] = 'Report abuse @whi@' + sender;
@@ -3175,11 +3175,11 @@ export class Client extends GameShell {
                                     this.localPlayer.chatTimer = 150;
 
                                     if (this.staffmodlevel === 2) {
-                                        this.addChat(ChatTypes.PUBLIC_FILTERED, this.localPlayer.chatMessage, '@cr2@' + this.localPlayer.name);
+                                        this.addChat(ChatTypes.PUBLIC, this.localPlayer.chatMessage, '@cr2@' + this.localPlayer.name);
                                     } else if (this.staffmodlevel === 1) {
-                                        this.addChat(ChatTypes.PUBLIC_FILTERED, this.localPlayer.chatMessage, '@cr1@' + this.localPlayer.name);
+                                        this.addChat(ChatTypes.PUBLIC, this.localPlayer.chatMessage, '@cr1@' + this.localPlayer.name);
                                     } else {
-                                        this.addChat(ChatTypes.PUBLIC_FILTERED, this.localPlayer.chatMessage, this.localPlayer.name);
+                                        this.addChat(ChatTypes.PUBLIC, this.localPlayer.chatMessage, this.localPlayer.name);
                                     }
                                 }
 
@@ -7898,7 +7898,7 @@ export class Client extends GameShell {
             player.chatTimer = 150;
 
             if (player.name) {
-                this.addChat(ChatTypes.PUBLIC_FILTERED, player.chatMessage, player.name);
+                this.addChat(ChatTypes.PUBLIC, player.chatMessage, player.name);
             }
         }
 
@@ -7946,11 +7946,11 @@ export class Client extends GameShell {
                         player.chatTimer = 150;
 
                         if (type === 2 || type === 3) {
-                            this.addChat(ChatTypes.PUBLIC, filtered, '@cr2@' + player.name);
+                            this.addChat(ChatTypes.PUBLIC_MOD, filtered, '@cr2@' + player.name);
                         } else if (type === 1) {
-                            this.addChat(ChatTypes.PUBLIC, filtered, '@cr1@' + player.name);
+                            this.addChat(ChatTypes.PUBLIC_MOD, filtered, '@cr1@' + player.name);
                         } else {
-                            this.addChat(ChatTypes.PUBLIC_FILTERED, filtered, player.name);
+                            this.addChat(ChatTypes.PUBLIC, filtered, player.name);
                         }
                     } catch (_e) {
                         // signlink.reporterror('cde2');
@@ -11192,7 +11192,7 @@ export class Client extends GameShell {
                     }
 
                     line++;
-                } else if ((type === ChatTypes.PUBLIC || type === ChatTypes.PUBLIC_FILTERED) && (type === ChatTypes.PUBLIC || this.chatPublicMode === 0 || (this.chatPublicMode === 1 && this.isFriend(sender)))) {
+                } else if ((type === ChatTypes.PUBLIC_MOD || type === ChatTypes.PUBLIC) && (type === ChatTypes.PUBLIC_MOD || this.chatPublicMode === 0 || (this.chatPublicMode === 1 && this.isFriend(sender)))) {
                     if (y > 0 && y < 110) {
                         let x = 4;
                         if (modlevel == 1) {

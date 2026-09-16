@@ -1,7 +1,7 @@
 export const enum ChatTypes {
     GENERIC = 0,
-    PUBLIC = 1,
-    PUBLIC_FILTERED = 2,
+    PUBLIC_MOD = 1,
+    PUBLIC = 2,
     PRIVATE_INCOMING = 3,
     TRADE_REQUEST = 4,
     PRIVATE_NOTIFICATION = 5,

@@ -72,6 +72,8 @@ import WordPack from '#/wordfilter/WordPack.js';
 
 import JagFX from '#/sound/JagFX.js';
 
+import { ChatTypes } from '#/client/ChatTypes.js';
+
 const CLIENT_VERSION = 274;
 
 const MAX_PLAYER_COUNT = 2048;
@@ -2623,7 +2625,7 @@ export class Client extends GameShell {
                     _mod = true;
                 }
 
-                if ((type === 3 || type === 7) && (type === 7 || this.chatPrivateMode === 0 || (this.chatPrivateMode === 1 && this.isFriend(sender)))) {
+                if ((type === ChatTypes.PRIVATE_INCOMING_FILTERED || type === ChatTypes.PRIVATE_INCOMING) && (type === ChatTypes.PRIVATE_INCOMING || this.chatPrivateMode === 0 || (this.chatPrivateMode === 1 && this.isFriend(sender)))) {
                     const y: number = 329 - line * 13;
 
                     if (this.mouseX > 4 && this.mouseX < 516 && this.mouseY - 4 > y - 10 && this.mouseY - 4 <= y + 3) {
@@ -2646,7 +2648,7 @@ export class Client extends GameShell {
                     if (line >= 5) {
                         return;
                     }
-                } else if ((type === 5 || type === 6) && this.chatPrivateMode < 2) {
+                } else if ((type === ChatTypes.PRIVATE_NOTIFICATION || type === ChatTypes.PRIVATE_OUTGOING) && this.chatPrivateMode < 2) {
                     line++;
                     if (line >= 5) {
                         return;
@@ -2680,9 +2682,9 @@ export class Client extends GameShell {
                 _mod = true;
             }
 
-            if (type === 0) {
+            if (type === ChatTypes.GENERIC) {
                 line++;
-            } else if ((type == 1 || type == 2) && (type == 1 || this.chatPublicMode == 0 || (this.chatPublicMode == 1 && this.isFriend(sender)))) {
+            } else if ((type == ChatTypes.PUBLIC || type == ChatTypes.PUBLIC_FILTERED) && (type == 1 || this.chatPublicMode == 0 || (this.chatPublicMode == 1 && this.isFriend(sender)))) {
                 if (mouseY > y - 14 && mouseY <= y && this.localPlayer && sender !== this.localPlayer.name) {
                     if (this.staffmodlevel >= 1) {
                         this.menuOption[this.menuNumEntries] = 'Report abuse @whi@' + sender;
@@ -2700,7 +2702,7 @@ export class Client extends GameShell {
                 }
 
                 line++;
-            } else if ((type === 3 || type === 7) && this.splitPrivateChat === 0 && (type === 7 || this.chatPrivateMode === 0 || (this.chatPrivateMode === 1 && this.isFriend(sender)))) {
+            } else if ((type === ChatTypes.PRIVATE_INCOMING_FILTERED || type === ChatTypes.PRIVATE_INCOMING) && this.splitPrivateChat === 0 && (type === ChatTypes.PRIVATE_INCOMING || this.chatPrivateMode === 0 || (this.chatPrivateMode === 1 && this.isFriend(sender)))) {
                 if (mouseY > y - 14 && mouseY <= y) {
                     if (this.staffmodlevel >= 1) {
                         this.menuOption[this.menuNumEntries] = 'Report abuse @whi@' + sender;
@@ -2718,7 +2720,7 @@ export class Client extends GameShell {
                 }
 
                 line++;
-            } else if (type === 4 && (this.chatTradeMode === 0 || (this.chatTradeMode === 1 && this.isFriend(sender)))) {
+            } else if (type === ChatTypes.TRADE_REQUEST && (this.chatTradeMode === 0 || (this.chatTradeMode === 1 && this.isFriend(sender)))) {
                 if (mouseY > y - 14 && mouseY <= y) {
                     this.menuOption[this.menuNumEntries] = 'Accept trade @whi@' + sender;
                     this.menuAction[this.menuNumEntries] = MiniMenuAction.ACCEPT_TRADEREQ;
@@ -2726,9 +2728,9 @@ export class Client extends GameShell {
                 }
 
                 line++;
-            } else if ((type === 5 || type === 6) && this.splitPrivateChat === 0 && this.chatPrivateMode < 2) {
+            } else if ((type === ChatTypes.PRIVATE_NOTIFICATION || type === ChatTypes.PRIVATE_OUTGOING) && this.splitPrivateChat === 0 && this.chatPrivateMode < 2) {
                 line++;
-            } else if (type === 8 && (this.chatTradeMode === 0 || (this.chatTradeMode === 1 && this.isFriend(sender)))) {
+            } else if (type === ChatTypes.DUEL_REQUEST && (this.chatTradeMode === 0 || (this.chatTradeMode === 1 && this.isFriend(sender)))) {
                 if (mouseY > y - 14 && mouseY <= y) {
                     this.menuOption[this.menuNumEntries] = 'Accept duel @whi@' + sender;
                     this.menuAction[this.menuNumEntries] = MiniMenuAction.ACCEPT_DUELREQ;
@@ -2997,7 +2999,7 @@ export class Client extends GameShell {
 
                                 this.socialInput = JString.toSentenceCase(this.socialInput);
                                 this.socialInput = WordFilter.filter(this.socialInput);
-                                this.addChat(6, this.socialInput, JString.toScreenName(JString.toRawUsername(this.socialUserhash)));
+                                this.addChat(ChatTypes.PRIVATE_OUTGOING, this.socialInput, JString.toScreenName(JString.toRawUsername(this.socialUserhash)));
 
                                 if (this.chatPrivateMode === 2) {
                                     this.chatPrivateMode = 1;
@@ -3173,11 +3175,11 @@ export class Client extends GameShell {
                                     this.localPlayer.chatTimer = 150;
 
                                     if (this.staffmodlevel === 2) {
-                                        this.addChat(2, this.localPlayer.chatMessage, '@cr2@' + this.localPlayer.name);
+                                        this.addChat(ChatTypes.PUBLIC_FILTERED, this.localPlayer.chatMessage, '@cr2@' + this.localPlayer.name);
                                     } else if (this.staffmodlevel === 1) {
-                                        this.addChat(2, this.localPlayer.chatMessage, '@cr1@' + this.localPlayer.name);
+                                        this.addChat(ChatTypes.PUBLIC_FILTERED, this.localPlayer.chatMessage, '@cr1@' + this.localPlayer.name);
                                     } else {
-                                        this.addChat(2, this.localPlayer.chatMessage, this.localPlayer.name);
+                                        this.addChat(ChatTypes.PUBLIC_FILTERED, this.localPlayer.chatMessage, this.localPlayer.name);
                                     }
                                 }
 
@@ -4948,7 +4950,7 @@ export class Client extends GameShell {
                 modlevel = 2;
             }
 
-            if ((type == 3 || type == 7) && (type == 7 || this.chatPrivateMode == 0 || (this.chatPrivateMode == 1 && this.isFriend(sender)))) {
+            if ((ChatTypes.PRIVATE_INCOMING_FILTERED == 3 || type == ChatTypes.PRIVATE_INCOMING) && (type == ChatTypes.PRIVATE_INCOMING || this.chatPrivateMode == 0 || (this.chatPrivateMode == 1 && this.isFriend(sender)))) {
                 const y = 329 - lineOffset * 13;
                 let x = 4;
 
@@ -4971,7 +4973,7 @@ export class Client extends GameShell {
                 if (lineOffset >= 5) {
                     return;
                 }
-            } else if (type === 5 && this.chatPrivateMode < 2) {
+            } else if (type === ChatTypes.PRIVATE_NOTIFICATION && this.chatPrivateMode < 2) {
                 const y = 329 - lineOffset * 13;
 
                 font?.drawString(this.chatText[i], 4, y, Colour.BLACK);
@@ -4981,7 +4983,7 @@ export class Client extends GameShell {
                 if (lineOffset >= 5) {
                     return;
                 }
-            } else if (type === 6 && this.chatPrivateMode < 2) {
+            } else if (type === ChatTypes.PRIVATE_OUTGOING && this.chatPrivateMode < 2) {
                 const y = 329 - lineOffset * 13;
 
                 font?.drawString('To ' + sender + ': ' + this.chatText[i], 4, y, Colour.BLACK);
@@ -6438,7 +6440,7 @@ export class Client extends GameShell {
                     }
 
                     if (!ignored && this.chatDisabled === 0) {
-                        this.addChat(4, 'wishes to trade with you.', player);
+                        this.addChat(ChatTypes.TRADE_REQUEST, 'wishes to trade with you.', player);
                     }
                 } else if (message.endsWith(':duelreq:')) {
                     const player: string = message.substring(0, message.indexOf(':'));
@@ -6453,10 +6455,12 @@ export class Client extends GameShell {
                     }
 
                     if (!ignored && this.chatDisabled === 0) {
-                        this.addChat(8, 'wishes to duel with you.', player);
+                        this.addChat(ChatTypes.DUEL_REQUEST, 'wishes to duel with you.', player);
                     }
+																
+												  
                 } else {
-                    this.addChat(0, message, '');
+                    this.addChat(ChatTypes.GENERIC, message, '');
                 }
 
                 this.ptype = -1;
@@ -6516,11 +6520,11 @@ export class Client extends GameShell {
                         const filtered: string = WordFilter.filter(uncompressed);
 
                         if (staffModLevel === 2 || staffModLevel === 3) {
-                            this.addChat(7, filtered, '@cr2@' + JString.toScreenName(JString.toRawUsername(from)));
+                            this.addChat(ChatTypes.PRIVATE_INCOMING, filtered, '@cr2@' + JString.toScreenName(JString.toRawUsername(from)));
                         } else if (staffModLevel === 1) {
-                            this.addChat(7, filtered, '@cr1@' + JString.toScreenName(JString.toRawUsername(from)));
+                            this.addChat(ChatTypes.PRIVATE_INCOMING, filtered, '@cr1@' + JString.toScreenName(JString.toRawUsername(from)));
                         } else {
-                            this.addChat(3, filtered, JString.toScreenName(JString.toRawUsername(from)));
+                            this.addChat(ChatTypes.PRIVATE_INCOMING_FILTERED, filtered, JString.toScreenName(JString.toRawUsername(from)));
                         }
                     } catch (_e) {
                         // signlink.reporterror('cde1'); TODO?
@@ -6550,10 +6554,10 @@ export class Client extends GameShell {
                             this.friendNodeId[i] = world;
                             this.redrawSide = true;
                             if (world > 0) {
-                                this.addChat(5, displayName + ' has logged in.', '');
+                                this.addChat(ChatTypes.PRIVATE_NOTIFICATION, displayName + ' has logged in.', '');
                             }
                             if (world === 0) {
-                                this.addChat(5, displayName + ' has logged out.', '');
+                                this.addChat(ChatTypes.PRIVATE_NOTIFICATION, displayName + ' has logged out.', '');
                             }
                         }
 
@@ -7894,7 +7898,7 @@ export class Client extends GameShell {
             player.chatTimer = 150;
 
             if (player.name) {
-                this.addChat(2, player.chatMessage, player.name);
+                this.addChat(ChatTypes.PUBLIC_FILTERED, player.chatMessage, player.name);
             }
         }
 
@@ -7942,11 +7946,11 @@ export class Client extends GameShell {
                         player.chatTimer = 150;
 
                         if (type === 2 || type === 3) {
-                            this.addChat(1, filtered, '@cr2@' + player.name);
+                            this.addChat(ChatTypes.PUBLIC, filtered, '@cr2@' + player.name);
                         } else if (type === 1) {
-                            this.addChat(1, filtered, '@cr1@' + player.name);
+                            this.addChat(ChatTypes.PUBLIC, filtered, '@cr1@' + player.name);
                         } else {
-                            this.addChat(2, filtered, player.name);
+                            this.addChat(ChatTypes.PUBLIC_FILTERED, filtered, player.name);
                         }
                     } catch (_e) {
                         // signlink.reporterror('cde2');
@@ -8644,7 +8648,7 @@ export class Client extends GameShell {
                 examine = obj.desc;
             }
 
-            this.addChat(0, examine, '');
+            this.addChat(ChatTypes.GENERIC, examine, '');
         }
 
         if (action === MiniMenuAction.TGT_OBJ) {
@@ -8734,7 +8738,7 @@ export class Client extends GameShell {
                     examine = npc.type.desc;
                 }
 
-                this.addChat(0, examine, '');
+                this.addChat(ChatTypes.GENERIC, examine, '');
             }
         }
 
@@ -8816,7 +8820,7 @@ export class Client extends GameShell {
                 examine = loc.desc;
             }
 
-            this.addChat(0, examine, '');
+            this.addChat(ChatTypes.GENERIC, examine, '');
         }
 
         if (action === MiniMenuAction.TGT_LOC) {
@@ -8921,7 +8925,7 @@ export class Client extends GameShell {
                 }
 
                 if (!found) {
-                    this.addChat(0, 'Unable to find ' + name, '');
+                    this.addChat(ChatTypes.GENERIC, 'Unable to find ' + name, '');
                 }
             }
         }
@@ -9019,7 +9023,7 @@ export class Client extends GameShell {
                 examine = obj.desc;
             }
 
-            this.addChat(0, examine, '');
+            this.addChat(ChatTypes.GENERIC, examine, '');
         }
 
         if (action === MiniMenuAction.USEHELD_START) {
@@ -11182,13 +11186,13 @@ export class Client extends GameShell {
                     modlevel = 2;
                 }
 
-                if (type === 0) {
+                if (type === ChatTypes.GENERIC) {
                     if (y > 0 && y < 110) {
                         font?.drawString(message, 4, y, Colour.BLACK);
                     }
 
                     line++;
-                } else if ((type === 1 || type === 2) && (type === 1 || this.chatPublicMode === 0 || (this.chatPublicMode === 1 && this.isFriend(sender)))) {
+                } else if ((type === ChatTypes.PUBLIC || type === ChatTypes.PUBLIC_FILTERED) && (type === ChatTypes.PUBLIC || this.chatPublicMode === 0 || (this.chatPublicMode === 1 && this.isFriend(sender)))) {
                     if (y > 0 && y < 110) {
                         let x = 4;
                         if (modlevel == 1) {
@@ -11206,7 +11210,7 @@ export class Client extends GameShell {
                     }
 
                     line++;
-                } else if ((type === 3 || type === 7) && this.splitPrivateChat === 0 && (type === 7 || this.chatPrivateMode === 0 || (this.chatPrivateMode === 1 && this.isFriend(sender)))) {
+                } else if ((type === ChatTypes.PRIVATE_INCOMING_FILTERED || type === ChatTypes.PRIVATE_INCOMING) && this.splitPrivateChat === 0 && (type === 7 || this.chatPrivateMode === 0 || (this.chatPrivateMode === 1 && this.isFriend(sender)))) {
                     if (y > 0 && y < 110) {
                         let x = 4;
 
@@ -11228,31 +11232,33 @@ export class Client extends GameShell {
                     }
 
                     line++;
-                } else if (type === 4 && (this.chatTradeMode === 0 || (this.chatTradeMode === 1 && this.isFriend(sender)))) {
+                } else if (type === ChatTypes.TRADE_REQUEST && (this.chatTradeMode === 0 || (this.chatTradeMode === 1 && this.isFriend(sender)))) {
                     if (y > 0 && y < 110) {
                         font?.drawString(sender + ' ' + this.chatText[i], 4, y, 0x800080);
                     }
 
                     line++;
-                } else if (type === 5 && this.splitPrivateChat === 0 && this.chatPrivateMode < 2) {
+                } else if (type === ChatTypes.PRIVATE_NOTIFICATION && this.splitPrivateChat === 0 && this.chatPrivateMode < 2) {
                     if (y > 0 && y < 110) {
                         font?.drawString(message, 4, y, Colour.DARKRED);
                     }
 
                     line++;
-                } else if (type === 6 && this.splitPrivateChat === 0 && this.chatPrivateMode < 2) {
+                } else if (type === ChatTypes.PRIVATE_OUTGOING && this.splitPrivateChat === 0 && this.chatPrivateMode < 2) {
                     if (y > 0 && y < 110) {
                         font?.drawString('To ' + sender + ':', 4, y, Colour.BLACK);
                         font?.drawString(message, font.stringWid('To ' + sender) + 12, y, Colour.DARKRED);
                     }
 
                     line++;
-                } else if (type === 8 && (this.chatTradeMode === 0 || (this.chatTradeMode === 1 && this.isFriend(sender)))) {
+                } else if (type === ChatTypes.DUEL_REQUEST && (this.chatTradeMode === 0 || (this.chatTradeMode === 1 && this.isFriend(sender)))) {
                     if (y > 0 && y < 110) {
                         font?.drawString(sender + ' ' + this.chatText[i], 4, y, 0x7e3200);
                     }
 
                     line++;
+										
+																	
                 }
             }
 
@@ -11465,7 +11471,7 @@ export class Client extends GameShell {
     }
 
     private addChat(type: number, text: string, sender: string): void {
-        if (type === 0 && this.tutComId !== -1) {
+        if (type === ChatTypes.GENERIC && this.tutComId !== -1) {
             this.tutComMessage = text;
             this.mouseClickButton = 0;
         }
@@ -11509,24 +11515,24 @@ export class Client extends GameShell {
         }
 
         if (this.friendCount >= 100 && this.membersAccount != 1) {
-            this.addChat(0, 'Your friendlist is full. Max of 100 for free users, and 200 for members', '');
+            this.addChat(ChatTypes.GENERIC, 'Your friendlist is full. Max of 100 for free users, and 200 for members', '');
             return;
         } else if (this.friendCount >= 200) {
-            this.addChat(0, 'Your friendlist is full. Max of 100 for free users, and 200 for members', '');
+            this.addChat(ChatTypes.GENERIC, 'Your friendlist is full. Max of 100 for free users, and 200 for members', '');
             return;
         }
 
         const displayName: string = JString.toScreenName(JString.toRawUsername(userhash));
         for (let i: number = 0; i < this.friendCount; i++) {
             if (this.friendUserhash[i] === userhash) {
-                this.addChat(0, displayName + ' is already on your friend list', '');
+                this.addChat(ChatTypes.GENERIC, displayName + ' is already on your friend list', '');
                 return;
             }
         }
 
         for (let i: number = 0; i < this.ignoreCount; i++) {
             if (this.ignoreUserhash[i] === userhash) {
-                this.addChat(0, 'Please remove ' + displayName + ' from your ignore list first', '');
+                this.addChat(ChatTypes.GENERIC, 'Please remove ' + displayName + ' from your ignore list first', '');
                 return;
             }
         }
@@ -11554,21 +11560,21 @@ export class Client extends GameShell {
         }
 
         if (this.ignoreCount >= 100) {
-            this.addChat(0, 'Your ignore list is full. Max of 100 hit', '');
+            this.addChat(ChatTypes.GENERIC, 'Your ignore list is full. Max of 100 hit', '');
             return;
         }
 
         const displayName: string = JString.toScreenName(JString.toRawUsername(userhash));
         for (let i: number = 0; i < this.ignoreCount; i++) {
             if (this.ignoreUserhash[i] === userhash) {
-                this.addChat(0, displayName + ' is already on your ignore list', '');
+                this.addChat(ChatTypes.GENERIC, displayName + ' is already on your ignore list', '');
                 return;
             }
         }
 
         for (let i: number = 0; i < this.friendCount; i++) {
             if (this.friendUserhash[i] === userhash) {
-                this.addChat(0, 'Please remove ' + displayName + ' from your friend list first', '');
+                this.addChat(ChatTypes.GENERIC, 'Please remove ' + displayName + ' from your friend list first', '');
                 return;
             }
         }

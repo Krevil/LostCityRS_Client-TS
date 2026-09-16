@@ -2682,7 +2682,7 @@ export class Client extends GameShell {
                 _mod = true;
             }
 
-            if (type === ChatTypes.GENERIC) {
+            if (type === ChatTypes.GENERIC || (type >= 20 && type <= 35)) {
                 line++;
             } else if ((type == ChatTypes.PUBLIC_MOD || type == ChatTypes.PUBLIC) && (type == ChatTypes.PUBLIC_MOD || this.chatPublicMode == 0 || (this.chatPublicMode == 1 && this.isFriend(sender)))) {
                 if (mouseY > y - 14 && mouseY <= y && this.localPlayer && sender !== this.localPlayer.name) {
@@ -6459,7 +6459,8 @@ export class Client extends GameShell {
                     }
 																
 												  
-                } else {
+                } 
+                else {
                     this.addChat(ChatTypes.GENERIC, message, '');
                 }
 
@@ -10041,7 +10042,12 @@ export class Client extends GameShell {
                                     if (icon.owi === 33 || child.linkObjNumber[slot] !== 1) {
                                         const count: number = child.linkObjNumber[slot];
                                         this.p11?.drawString(this.invNumber(count), slotX + dx + 1, slotY + 10 + dy, Colour.BLACK);
-                                        this.p11?.drawString(this.invNumber(count), slotX + dx, slotY + 9 + dy, Colour.YELLOW);
+                                        if (this.invNumber(count).endsWith('M')) {
+                                            this.p11?.drawString(this.invNumber(count), slotX + dx, slotY + 9 + dy, Colour.GREEN);
+                                        } else {
+                                            this.p11?.drawString(this.invNumber(count), slotX + dx, slotY + 9 + dy, Colour.YELLOW);
+                                        }
+                                        
                                     }
                                 }
                             }

@@ -7,5 +7,23 @@ export const enum ChatTypes {
     PRIVATE_NOTIFICATION = 5,
     PRIVATE_OUTGOING = 6,
     PRIVATE_INCOMING_MOD = 7,
-    DUEL_REQUEST = 8
+    DUEL_REQUEST = 8,
+
+    GENERIC_RED = 20,
+    GENERIC_GREEN = 21,
+    GENERIC_BLUE = 22,
+    GENERIC_YELLOW = 23,
+    GENERIC_CYAN = 24,
+    GENERIC_MAGENTA = 25,
+    GENERIC_WHITE = 26,
+    // Generic black would be here, but generic is already black
+    GENERIC_LIGHTRED = 27,
+    GENERIC_DARKRED = 28,
+    GENERIC_DARKBLUE = 29,
+    GENERIC_ORANGE1 = 30,
+    GENERIC_ORANGE2 = 31,
+    GENERIC_ORANGE3 = 32,
+    GENERIC_GREEN1 = 33,
+    GENERIC_GREEN2 = 34,
+    GENERIC_GREEN3 = 35,
 }

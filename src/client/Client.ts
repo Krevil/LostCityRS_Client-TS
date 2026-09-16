@@ -2998,7 +2998,7 @@ export class Client extends GameShell {
                                 this.out.psize1(this.out.pos - start);
 
                                 this.socialInput = JString.toSentenceCase(this.socialInput);
-                                this.socialInput = WordFilter.filter(this.socialInput);
+                                //this.socialInput = WordFilter.filter(this.socialInput);
                                 this.addChat(ChatTypes.PRIVATE_OUTGOING, this.socialInput, JString.toScreenName(JString.toRawUsername(this.socialUserhash)));
 
                                 if (this.chatPrivateMode === 2) {
@@ -3166,7 +3166,7 @@ export class Client extends GameShell {
                                 this.out.psize1(this.out.pos - start);
 
                                 this.chatInput = JString.toSentenceCase(this.chatInput);
-                                this.chatInput = WordFilter.filter(this.chatInput);
+                                //this.chatInput = WordFilter.filter(this.chatInput);
 
                                 if (this.localPlayer && this.localPlayer.name) {
                                     this.localPlayer.chatMessage = this.chatInput;
@@ -6459,7 +6459,55 @@ export class Client extends GameShell {
                     }
 																
 												  
-                } 
+                } else if (message.startsWith(":red:")) {
+                    const newMsg: string = message.substring(5);
+                    this.addChat(ChatTypes.GENERIC_RED, newMsg, '');
+                } else if (message.startsWith(':green:')) {
+                    const newMsg: string = message.substring(7);
+                    this.addChat(ChatTypes.GENERIC_GREEN, newMsg, '');
+                } else if (message.startsWith(':blue:')) {
+                    const newMsg: string = message.substring(6);
+                    this.addChat(ChatTypes.GENERIC_BLUE, newMsg, '');
+                } else if (message.startsWith(':yellow:')) {
+                    const newMsg: string = message.substring(8);
+                    this.addChat(ChatTypes.GENERIC_YELLOW, newMsg, '');
+                } else if (message.startsWith(':cyan:')) {
+                    const newMsg: string = message.substring(6);
+                    this.addChat(ChatTypes.GENERIC_CYAN, newMsg, '');
+                } else if (message.startsWith(':magenta:')) {
+                    const newMsg: string = message.substring(8);
+                    this.addChat(ChatTypes.GENERIC_MAGENTA, newMsg, '');
+                } else if (message.startsWith(':white:')) {
+                    const newMsg: string = message.substring(7);
+                    this.addChat(ChatTypes.GENERIC_WHITE, newMsg, '');
+                } else if (message.startsWith(':lightred:')) {
+                    const newMsg: string = message.substring(10);
+                    this.addChat(ChatTypes.GENERIC_LIGHTRED, newMsg, '');
+                } else if (message.startsWith(':darkred:')) {
+                    const newMsg: string = message.substring(9);
+                    this.addChat(ChatTypes.GENERIC_DARKRED, newMsg, '');
+                } else if (message.startsWith(':darkblue:')) {
+                    const newMsg: string = message.substring(10);
+                    this.addChat(ChatTypes.GENERIC_DARKBLUE, newMsg, '');
+                } else if (message.startsWith(':orange1:')) {
+                    const newMsg: string = message.substring(9);
+                    this.addChat(ChatTypes.GENERIC_ORANGE1, newMsg, '');
+                } else if (message.startsWith(':orange2:')) {
+                    const newMsg: string = message.substring(9);
+                    this.addChat(ChatTypes.GENERIC_ORANGE2, newMsg, '');
+                } else if (message.startsWith(':orange3:')) {
+                    const newMsg: string = message.substring(9);
+                    this.addChat(ChatTypes.GENERIC_ORANGE3, newMsg, '');
+                } else if (message.startsWith(':green1:')) {
+                    const newMsg: string = message.substring(8);
+                    this.addChat(ChatTypes.GENERIC_GREEN1, newMsg, '');
+                } else if (message.startsWith(':green2:')) {
+                    const newMsg: string = message.substring(8);
+                    this.addChat(ChatTypes.GENERIC_GREEN2, newMsg, '');
+                } else if (message.startsWith(':green3:')) {
+                    const newMsg: string = message.substring(8);
+                    this.addChat(ChatTypes.GENERIC_GREEN3, newMsg, '');
+                }
                 else {
                     this.addChat(ChatTypes.GENERIC, message, '');
                 }
@@ -6518,14 +6566,14 @@ export class Client extends GameShell {
                         this.privateMessageCount = (this.privateMessageCount + 1) % 100;
 
                         const uncompressed: string = WordPack.unpack(this.in, this.psize - 13);
-                        const filtered: string = WordFilter.filter(uncompressed);
+                        //const filtered: string = WordFilter.filter(uncompressed);
 
                         if (staffModLevel === 2 || staffModLevel === 3) {
-                            this.addChat(ChatTypes.PRIVATE_INCOMING_MOD, filtered, '@cr2@' + JString.toScreenName(JString.toRawUsername(from)));
+                            this.addChat(ChatTypes.PRIVATE_INCOMING_MOD, uncompressed, '@cr2@' + JString.toScreenName(JString.toRawUsername(from)));
                         } else if (staffModLevel === 1) {
-                            this.addChat(ChatTypes.PRIVATE_INCOMING_MOD, filtered, '@cr1@' + JString.toScreenName(JString.toRawUsername(from)));
+                            this.addChat(ChatTypes.PRIVATE_INCOMING_MOD, uncompressed, '@cr1@' + JString.toScreenName(JString.toRawUsername(from)));
                         } else {
-                            this.addChat(ChatTypes.PRIVATE_INCOMING, filtered, JString.toScreenName(JString.toRawUsername(from)));
+                            this.addChat(ChatTypes.PRIVATE_INCOMING, uncompressed, JString.toScreenName(JString.toRawUsername(from)));
                         }
                     } catch (_e) {
                         // signlink.reporterror('cde1'); TODO?
@@ -7940,18 +7988,18 @@ export class Client extends GameShell {
                 if (!ignored && this.chatDisabled === 0) {
                     try {
                         const uncompressed: string = WordPack.unpack(buf, length);
-                        const filtered: string = WordFilter.filter(uncompressed);
-                        player.chatMessage = filtered;
+                        //const filtered: string = WordFilter.filter(uncompressed);
+                        player.chatMessage = uncompressed;
                         player.chatColour = colourEffect >> 8;
                         player.chatEffect = colourEffect & 0xff;
                         player.chatTimer = 150;
 
                         if (type === 2 || type === 3) {
-                            this.addChat(ChatTypes.PUBLIC_MOD, filtered, '@cr2@' + player.name);
+                            this.addChat(ChatTypes.PUBLIC_MOD, uncompressed, '@cr2@' + player.name);
                         } else if (type === 1) {
-                            this.addChat(ChatTypes.PUBLIC_MOD, filtered, '@cr1@' + player.name);
+                            this.addChat(ChatTypes.PUBLIC_MOD, uncompressed, '@cr1@' + player.name);
                         } else {
-                            this.addChat(ChatTypes.PUBLIC, filtered, player.name);
+                            this.addChat(ChatTypes.PUBLIC, uncompressed, player.name);
                         }
                     } catch (_e) {
                         // signlink.reporterror('cde2');
@@ -10047,7 +10095,6 @@ export class Client extends GameShell {
                                         } else {
                                             this.p11?.drawString(this.invNumber(count), slotX + dx, slotY + 9 + dy, Colour.YELLOW);
                                         }
-                                        
                                     }
                                 }
                             }
@@ -11265,6 +11312,102 @@ export class Client extends GameShell {
                     line++;
 										
 																	
+                } else if (type === ChatTypes.GENERIC_RED) {
+                    if (y > 0 && y < 110) {
+                        font?.drawString(message, 4, y, Colour.RED);
+                    }
+
+                    line++;
+                } else if (type === ChatTypes.GENERIC_GREEN) {
+                    if (y > 0 && y < 110) {
+                        font?.drawString(message, 4, y, Colour.GREEN);
+                    }
+
+                    line++;
+                } else if (type === ChatTypes.GENERIC_BLUE) {
+                    if (y > 0 && y < 110) {
+                        font?.drawString(message, 4, y, Colour.BLUE);
+                    }
+
+                    line++;
+                } else if (type === ChatTypes.GENERIC_YELLOW) {
+                    if (y > 0 && y < 110) {
+                        font?.drawString(message, 4, y, Colour.YELLOW);
+                    }
+
+                    line++;
+                } else if (type === ChatTypes.GENERIC_CYAN) {
+                    if (y > 0 && y < 110) {
+                        font?.drawString(message, 4, y, Colour.CYAN);
+                    }
+
+                    line++;
+                } else if (type === ChatTypes.GENERIC_MAGENTA) {
+                    if (y > 0 && y < 110) {
+                        font?.drawString(message, 4, y, Colour.MAGENTA);
+                    }
+
+                    line++;
+                } else if (type === ChatTypes.GENERIC_WHITE) {
+                    if (y > 0 && y < 110) {
+                        font?.drawString(message, 4, y, Colour.WHITE);
+                    }
+
+                    line++;
+                } else if (type === ChatTypes.GENERIC_LIGHTRED) {
+                    if (y > 0 && y < 110) {
+                        font?.drawString(message, 4, y, Colour.LIGHTRED);
+                    }
+
+                    line++;
+                } else if (type === ChatTypes.GENERIC_DARKRED) {
+                    if (y > 0 && y < 110) {
+                        font?.drawString(message, 4, y, Colour.DARKRED);
+                    }
+
+                    line++;
+                } else if (type === ChatTypes.GENERIC_DARKBLUE) {
+                    if (y > 0 && y < 110) {
+                        font?.drawString(message, 4, y, Colour.DARKBLUE);
+                    }
+
+                    line++;
+                } else if (type === ChatTypes.GENERIC_ORANGE1) {
+                    if (y > 0 && y < 110) {
+                        font?.drawString(message, 4, y, Colour.ORANGE1);
+                    }
+
+                    line++;
+                } else if (type === ChatTypes.GENERIC_ORANGE2) {
+                    if (y > 0 && y < 110) {
+                        font?.drawString(message, 4, y, Colour.ORANGE2);
+                    }
+
+                    line++;
+                } else if (type === ChatTypes.GENERIC_ORANGE3) {
+                    if (y > 0 && y < 110) {
+                        font?.drawString(message, 4, y, Colour.ORANGE3);
+                    }
+
+                    line++;
+                } else if (type === ChatTypes.GENERIC_GREEN1) {
+                    if (y > 0 && y < 110) {
+                        font?.drawString(message, 4, y, Colour.GREEN1);
+                    }
+
+                    line++;
+                } else if (type === ChatTypes.GENERIC_GREEN2) {
+                    if (y > 0 && y < 110) {
+                        font?.drawString(message, 4, y, Colour.GREEN2);
+                    }
+
+                    line++;
+                } else if (type === ChatTypes.GENERIC_GREEN3) {
+                    if (y > 0 && y < 110) {
+                        font?.drawString(message, 4, y, Colour.GREEN3);
+                    }
+
+                    line++;
                 }
             }
 

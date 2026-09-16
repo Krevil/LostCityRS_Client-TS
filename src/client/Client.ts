@@ -2625,7 +2625,7 @@ export class Client extends GameShell {
                     _mod = true;
                 }
 
-                if ((type === ChatTypes.PRIVATE_INCOMING_FILTERED || type === ChatTypes.PRIVATE_INCOMING) && (type === ChatTypes.PRIVATE_INCOMING || this.chatPrivateMode === 0 || (this.chatPrivateMode === 1 && this.isFriend(sender)))) {
+                if ((type === ChatTypes.PRIVATE_INCOMING || type === ChatTypes.PRIVATE_INCOMING_MOD) && (type === ChatTypes.PRIVATE_INCOMING_MOD || this.chatPrivateMode === 0 || (this.chatPrivateMode === 1 && this.isFriend(sender)))) {
                     const y: number = 329 - line * 13;
 
                     if (this.mouseX > 4 && this.mouseX < 516 && this.mouseY - 4 > y - 10 && this.mouseY - 4 <= y + 3) {
@@ -2702,7 +2702,7 @@ export class Client extends GameShell {
                 }
 
                 line++;
-            } else if ((type === ChatTypes.PRIVATE_INCOMING_FILTERED || type === ChatTypes.PRIVATE_INCOMING) && this.splitPrivateChat === 0 && (type === ChatTypes.PRIVATE_INCOMING || this.chatPrivateMode === 0 || (this.chatPrivateMode === 1 && this.isFriend(sender)))) {
+            } else if ((type === ChatTypes.PRIVATE_INCOMING || type === ChatTypes.PRIVATE_INCOMING_MOD) && this.splitPrivateChat === 0 && (type === ChatTypes.PRIVATE_INCOMING_MOD || this.chatPrivateMode === 0 || (this.chatPrivateMode === 1 && this.isFriend(sender)))) {
                 if (mouseY > y - 14 && mouseY <= y) {
                     if (this.staffmodlevel >= 1) {
                         this.menuOption[this.menuNumEntries] = 'Report abuse @whi@' + sender;
@@ -4950,7 +4950,7 @@ export class Client extends GameShell {
                 modlevel = 2;
             }
 
-            if ((ChatTypes.PRIVATE_INCOMING_FILTERED == 3 || type == ChatTypes.PRIVATE_INCOMING) && (type == ChatTypes.PRIVATE_INCOMING || this.chatPrivateMode == 0 || (this.chatPrivateMode == 1 && this.isFriend(sender)))) {
+            if ((type == ChatTypes.PRIVATE_INCOMING || type == ChatTypes.PRIVATE_INCOMING_MOD) && (type == ChatTypes.PRIVATE_INCOMING_MOD || this.chatPrivateMode == 0 || (this.chatPrivateMode == 1 && this.isFriend(sender)))) {
                 const y = 329 - lineOffset * 13;
                 let x = 4;
 
@@ -6520,11 +6520,11 @@ export class Client extends GameShell {
                         const filtered: string = WordFilter.filter(uncompressed);
 
                         if (staffModLevel === 2 || staffModLevel === 3) {
-                            this.addChat(ChatTypes.PRIVATE_INCOMING, filtered, '@cr2@' + JString.toScreenName(JString.toRawUsername(from)));
+                            this.addChat(ChatTypes.PRIVATE_INCOMING_MOD, filtered, '@cr2@' + JString.toScreenName(JString.toRawUsername(from)));
                         } else if (staffModLevel === 1) {
-                            this.addChat(ChatTypes.PRIVATE_INCOMING, filtered, '@cr1@' + JString.toScreenName(JString.toRawUsername(from)));
+                            this.addChat(ChatTypes.PRIVATE_INCOMING_MOD, filtered, '@cr1@' + JString.toScreenName(JString.toRawUsername(from)));
                         } else {
-                            this.addChat(ChatTypes.PRIVATE_INCOMING_FILTERED, filtered, JString.toScreenName(JString.toRawUsername(from)));
+                            this.addChat(ChatTypes.PRIVATE_INCOMING, filtered, JString.toScreenName(JString.toRawUsername(from)));
                         }
                     } catch (_e) {
                         // signlink.reporterror('cde1'); TODO?
@@ -11210,7 +11210,7 @@ export class Client extends GameShell {
                     }
 
                     line++;
-                } else if ((type === ChatTypes.PRIVATE_INCOMING_FILTERED || type === ChatTypes.PRIVATE_INCOMING) && this.splitPrivateChat === 0 && (type === 7 || this.chatPrivateMode === 0 || (this.chatPrivateMode === 1 && this.isFriend(sender)))) {
+                } else if ((type === ChatTypes.PRIVATE_INCOMING || type === ChatTypes.PRIVATE_INCOMING_MOD) && this.splitPrivateChat === 0 && (type === ChatTypes.PRIVATE_INCOMING_MOD || this.chatPrivateMode === 0 || (this.chatPrivateMode === 1 && this.isFriend(sender)))) {
                     if (y > 0 && y < 110) {
                         let x = 4;
 

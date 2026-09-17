@@ -6311,7 +6311,7 @@ export class Client extends GameShell {
                 }
 
                 while (this.in.pos < this.psize) {
-                    const slot: number = this.in.g1();
+                    const slot: number = this.in.g2();
                     const id: number = this.in.g2();
 
                     let count: number = this.in.g1();

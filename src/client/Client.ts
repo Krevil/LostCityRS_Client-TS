@@ -6279,7 +6279,7 @@ export class Client extends GameShell {
                     throw new Error();
                 }
 
-                const size: number = this.in.g1();
+                const size: number = this.in.g2();
                 for (let i: number = 0; i < size; i++) {
                     inv.linkObjType[i] = this.in.g2();
 

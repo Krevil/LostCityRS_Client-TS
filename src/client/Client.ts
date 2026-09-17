@@ -10090,7 +10090,9 @@ export class Client extends GameShell {
                                     if (icon.owi === 33 || child.linkObjNumber[slot] !== 1) {
                                         const count: number = child.linkObjNumber[slot];
                                         this.p11?.drawString(this.invNumber(count), slotX + dx + 1, slotY + 10 + dy, Colour.BLACK);
-                                        if (this.invNumber(count).endsWith('M')) {
+                                        if (this.invNumber(count).endsWith('K')) {
+                                            this.p11?.drawString(this.invNumber(count), slotX + dx, slotY + 9 + dy, Colour.WHITE);
+                                        } else if (this.invNumber(count).endsWith('M')) {
                                             this.p11?.drawString(this.invNumber(count), slotX + dx, slotY + 9 + dy, Colour.GREEN);
                                         } else {
                                             this.p11?.drawString(this.invNumber(count), slotX + dx, slotY + 9 + dy, Colour.YELLOW);

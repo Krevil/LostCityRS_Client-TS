@@ -157,6 +157,11 @@ export class Client extends GameShell {
     private mouseTrackDelta: number = 0;
     private focusIn: boolean = false;
 
+    private cameraZoom: number = 600;
+    private minZoom: number = 100;    
+    private maxZoom: number = 1800;
+    private mouseScrollDelta: number = 0;
+
     private showFps: boolean = false;
     private rebootTimer: number = 0;
 
@@ -3258,6 +3263,21 @@ export class Client extends GameShell {
         this.mouseDeltaX = 0;
         this.mouseDeltaY = 0;
 
+        if (this.mouseScrollDelta !== 0) {
+            // Adjust zoom amount
+            this.cameraZoom += (this.mouseScrollDelta * 0.5) | 0;
+            
+            // Clamp the zoom
+            if (this.cameraZoom < this.minZoom) {
+                this.cameraZoom = this.minZoom;
+            } else if (this.cameraZoom > this.maxZoom) {
+                this.cameraZoom = this.maxZoom;
+            }
+            
+            // Reset the scroll delta so it doesn't infinite scroll
+            this.mouseScrollDelta = 0;
+        }
+
         if (this.keyHeld[3] === 1) {
             this.orbitCameraPitchVelocity += ((12 - this.orbitCameraPitchVelocity) / 2) | 0;
         } else if (this.keyHeld[4] === 1) {
@@ -3280,10 +3300,14 @@ export class Client extends GameShell {
         const orbitY: number = this.getAvH(this.orbitCameraX, this.orbitCameraZ, this.minusedlevel);
         let maxY: number = 0;
 
+        // Scale the terrain check grid radius based on zoom depth
+        // At max zoom (1200), check 8 tiles away; at min zoom (200), check only 2 tiles away
+        const checkRadius: number = (this.cameraZoom / 150) | 0 || 2;
+
         if (this.groundh) {
-            if (orbitTileX > 3 && orbitTileZ > 3 && orbitTileX < 100 && orbitTileZ < 100) {
-                for (let x: number = orbitTileX - 4; x <= orbitTileX + 4; x++) {
-                    for (let z: number = orbitTileZ - 4; z <= orbitTileZ + 4; z++) {
+            if (orbitTileX > checkRadius && orbitTileZ > checkRadius && orbitTileX < 100 && orbitTileZ < 100) {
+                for (let x: number = orbitTileX - checkRadius; x <= orbitTileX + checkRadius; x++) {
+                    for (let z: number = orbitTileZ - checkRadius; z <= orbitTileZ + checkRadius; z++) {
                         let level: number = this.minusedlevel;
                         if (level < 3 && this.mapl && (this.mapl[1][x][z] & MapFlag.VisBelow) !== 0) {
                             level++;
@@ -4201,7 +4225,7 @@ export class Client extends GameShell {
             const yaw: number = (this.orbitCameraYaw + this.macroCameraAngle) & 0x7ff;
 
             if (this.localPlayer) {
-                this.camFollow(pitch, yaw, this.orbitCameraX, this.getAvH(this.localPlayer.x, this.localPlayer.z, this.minusedlevel) - 50, this.orbitCameraZ, pitch * 3 + 600);
+                this.camFollow(pitch, yaw, this.orbitCameraX, this.getAvH(this.localPlayer.x, this.localPlayer.z, this.minusedlevel) - 50, this.orbitCameraZ, pitch * 3 + this.cameraZoom);
             }
         }
 
@@ -12010,6 +12034,11 @@ export class Client extends GameShell {
             this.mx = this.nx;
             this.my = this.ny;
         }
+    }
+
+    override wheelMove(x: number, e: WheelEvent)
+    {
+        this.mouseScrollDelta = x;
     }
 
     private exceedsGrabThreshold(size: number) {

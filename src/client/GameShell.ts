@@ -108,6 +108,7 @@ export default abstract class GameShell {
         canvas.onpointermove = this.onpointermove.bind(this);
         window.onmouseup = this.windowMouseUp.bind(this);
         window.onmousemove = this.windowMouseMove.bind(this);
+        canvas.onwheel = this.onwheel.bind(this);
 
         if (this.isTouchDevice) {
             canvas.style.touchAction = 'pinch-zoom';
@@ -342,6 +343,8 @@ export default abstract class GameShell {
         }
     }
 
+
+
     private onpointerdown(e: PointerEvent) {
         if (e.clientX < 0 || e.clientY < 0) {
             return;
@@ -539,6 +542,13 @@ export default abstract class GameShell {
         if (!CanvasEnabledKeys.includes(e.key)) {
             e.preventDefault();
         }
+    }
+
+    private onwheel(e: WheelEvent) {
+        this.wheelMove(e.deltaY, e);
+    }
+
+    protected wheelMove(x: number, e: WheelEvent) {
     }
 
     protected pollKey() {

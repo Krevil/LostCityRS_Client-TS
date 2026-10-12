@@ -1720,7 +1720,7 @@ export default class Model extends ModelSource {
         const radiusCosEyePitch: number = (this.radius * cosEyePitch) >> 16;
 
         const maxZ: number = midZ + radiusCosEyePitch;
-        if (maxZ <= 50 || midZ >= 3500) {
+        if (maxZ <= 50 || midZ >= 7000) {
             return;
         }
 

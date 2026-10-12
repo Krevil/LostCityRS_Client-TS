@@ -3323,8 +3323,8 @@ export class Client extends GameShell {
         }
 
         let clamp: number = maxY * 192;
-        if (clamp > 98048) {
-            clamp = 98048;
+        if (clamp > 98048 * 2) {
+            clamp = 98048 * 2;
         } else if (clamp < 32768) {
             clamp = 32768;
         }

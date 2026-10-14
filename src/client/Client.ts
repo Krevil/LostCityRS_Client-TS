@@ -11454,14 +11454,14 @@ export class Client extends GameShell {
             }
             if (this.staffmodlevel === 2) {
                 this.modIcons[1].plotSprite(4, 78);
-                font?.drawString(username + ':', 18, 90, Colour.BLACK);
+                font?.drawString(username + ':', 17, 90, Colour.BLACK);
             font?.drawString(this.chatInput + '*', font.stringWid(username + ': ') + 19, 90, Colour.BLUE);
             } else if (this.staffmodlevel === 1) {
                 this.modIcons[0].plotSprite(4, 78);
-                font?.drawString(username + ':', 18, 90, Colour.BLACK);
+                font?.drawString(username + ':', 17, 90, Colour.BLACK);
                 font?.drawString(this.chatInput + '*', font.stringWid(username + ': ') + 19, 90, Colour.BLUE);
             } else {
-                font?.drawString(username + ':', 18, 90, Colour.BLACK);
+                font?.drawString(username + ':', 4, 90, Colour.BLACK);
                 font?.drawString(this.chatInput + '*', font.stringWid(username + ': ') + 6, 90, Colour.BLUE);
             }
 
